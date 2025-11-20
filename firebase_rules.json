@@ -1,0 +1,27 @@
+{
+  "rules": {
+    "donations": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$donationId": {
+        ".write": "auth != null && (newData.child('donorId').val() === auth.uid || !data.exists())"
+      }
+    },
+    "ngos": {
+      ".read": "auth != null",
+      ".write": "auth != null && auth.token.isNgo === true" 
+    },
+    "volunteers": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "feedback": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "pickupRequests": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    }
+  }
+}

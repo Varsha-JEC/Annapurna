@@ -1,0 +1,740 @@
+/* --- GENERAL STYLING --- */
+[data-testid="stAppViewContainer"] {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', 'Helvetica Neue', sans-serif;
+    line-height: 1.10;
+}
+
+/* --- NAVBAR --- */
+.stApp > header {
+    background: linear-gradient(90deg, #1e293b 0%, #334155 100%) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- HEADINGS & TEXT --- */
+.stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
+    color: #1e293b !important;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.stApp h1 {
+    font-size: 2.5rem !important;
+    background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.section-heading {
+    text-align: center;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.section-heading::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    border-radius: 2px;
+}
+
+/* --- HERO BANNER --- */
+.stApp .hero-banner {
+    position: relative;
+    overflow: hidden;
+}
+
+.stApp .hero-banner img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 20px;
+    transition: transform 0.4s ease, filter 0.3s ease;
+    filter: brightness(1.1) contrast(1.05);
+}
+
+.stApp .hero-banner:hover img {
+    transform: scale(1.02);
+    filter: brightness(1.2) contrast(1.1);
+}
+
+.stApp .hero-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    border-radius: 20px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.stApp .hero-banner:hover::before {
+    opacity: 1;
+}
+
+/* --- IMAGE CARDS --- */
+.stApp .image-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.stApp .image-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s ease;
+}
+
+.stApp .image-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04),
+        0 0 0 1px rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.stApp .image-card:hover::before {
+    left: 100%;
+}
+
+.stApp .image-card img {
+    width: 100%;
+    border-radius: 15px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    transition: all 0.3s ease;
+    filter: brightness(1.0) saturate(1.0);
+}
+
+.stApp .image-card:hover img {
+    filter: brightness(1.1) saturate(1.2);
+    transform: scale(1.05);
+}
+
+.stApp .image-card p {
+    margin-top: 1rem;
+    color: #374151 !important;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: color 0.2s ease;
+}
+
+.stApp .image-card:hover p {
+    color: #1e293b !important;
+}
+
+/* --- FLOATING CHATBOT BUTTON STYLES --- */
+/* Target the container of floating chat button */
+div[data-testid="stVerticalBlock"]:has(button[key="floating_chat_toggle"]) {
+    position: fixed !important;
+    bottom: 30px !important;
+    right: 30px !important;
+    z-index: 999999 !important;
+    width: auto !important;
+    height: auto !important;
+    pointer-events: auto !important;
+}
+
+/* Style the floating chat button specifically */
+button[key="floating_chat_toggle"] {
+    position: relative !important;
+    background: linear-gradient(135deg, #699beb 0%, #8f65f3 100%) !important;
+    color: #ffffff !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 50px !important;
+    padding: 15px 25px !important;
+    font-size: 1.5rem !important;
+    font-weight: 1000 !important;
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4) !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+    width: auto !important;
+    height: auto !important;
+}
+button[key="floating_chat_toggle"] > div > p {
+    color: #ffffff !important;
+}
+button[key="floating_chat_toggle"]:hover {
+    transform: translateY(-5px) scale(1.05) !important;
+    box-shadow: 0 12px 30px rgba(139, 92, 246, 0.6) !important;
+    background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%) !important;
+}
+
+button[key="floating_chat_toggle"]::before {
+    display: none !important;
+}
+
+/* Close chat button styling */
+button[key="close_chat"] {
+    background: rgba(239, 68, 68, 0.1) !important;
+    color: #ef4444 !important;
+    border: 1px solid rgba(239, 68, 68, 0.2) !important;
+    border-radius: 8px !important;
+    padding: 0.5rem !important;
+    font-size: 1rem !important;
+    transition: all 0.2s ease !important;
+}
+
+button[key="close_chat"]:hover {
+    background: rgba(239, 68, 68, 0.2) !important;
+    transform: scale(1.05) !important;
+}
+
+/* --- FOOTER STYLING (COMPLETE SECTION) --- */
+.footer-container {
+    background: linear-gradient(135deg, #b8a8d8 0%, #8b7ba8 100%) !important;
+    padding: 3rem 2rem 2rem 2rem !important;
+    margin-top: 4rem !important;
+    margin-left: -2rem !important;
+    margin-right: -2rem !important;
+    width: calc(100% + 4rem) !important;
+    border-top: 2px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 0 !important;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.footer-content {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+    gap: 2.5rem !important;
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 0 1rem !important;
+}
+
+.footer-column {
+    padding: 0 !important;
+}
+
+/* Footer Titles - White and Bold */
+.footer-container .footer-title,
+.footer-container h3 {
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    margin-bottom: 1.2rem !important;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3) !important;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: white !important;
+    background-clip: initial !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* Footer Text - Light White/Grey */
+.footer-container .footer-text,
+.footer-container p {
+    color: rgba(255, 255, 255, 0.95) !important;
+    line-height: 1.8 !important;
+    font-size: 1rem !important;
+    margin-bottom: 0.8rem !important;
+}
+
+/* Footer Links List */
+.footer-container .footer-links {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.footer-container .footer-links li {
+    margin-bottom: 0.8rem !important;
+}
+
+.footer-container .footer-link {
+    color: rgba(255,255,255, 0.9) !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+    display: inline-block !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+}
+
+.footer-container .footer-link:hover {
+    color: #fbbf24 !important;
+    transform: translateX(8px) !important;
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.5) !important;
+}
+
+/* Email and Phone Links */
+.footer-container .footer-email,
+.footer-container .footer-phone {
+    color: rgba(255,255,255, 0.9) !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+}
+
+.footer-container .footer-email:hover,
+.footer-container .footer-phone:hover {
+    color: #fbbf24 !important;
+    text-decoration: underline !important;
+}
+
+/* Social Icons */
+.footer-container .social-icons {
+    display: flex !important;
+    justify-content: flex-start !important;
+    gap: 2rem;
+    margin-top: 1.5rem !important;
+    flex-wrap: wrap !important;
+}
+
+.footer-container .social-icon {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+    text-decoration: none !important;
+    color: white !important;
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+.footer-container .social-icon svg {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.footer-container .social-icon:hover {
+    background: #fbbf24 !important;
+    border-color: #fbbf24 !important;
+    color: #4b5563 !important;
+    transform: translateY(-5px) scale(1.1) !important;
+    box-shadow: 0 8px 20px rgba(251, 191, 36, 0.6) !important;
+}
+
+/* Footer Bottom Section */
+.footer-container .footer-bottom {
+    margin-top: 3rem !important;
+    padding-top: 2rem !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+    text-align: center !important;
+}
+
+.footer-container .footer-bottom p {
+    font-size: 0.95rem !important;
+    color: rgba(255,255,255, 0.85) !important;
+    margin: 0 !important;
+    font-weight: 400 !important;
+}
+
+/* Responsive Design for Footer */
+@media (max-width: 968px) {
+    .footer-container {
+        padding: 2.5rem 1.5rem 1.5rem 1.5rem !important;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+    
+    .footer-container .social-icons {
+        justify-content: center !important;
+    }
+    
+    .footer-column {
+        text-align: center !important;
+    }
+    
+    .footer-container .footer-links {
+        text-align: center !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-container {
+        padding: 2rem 1rem 1rem 1rem !important;
+        margin-left: -1rem !important;
+        margin-right: -1rem !important;
+        width: calc(100% + 2rem) !important;
+    }
+    
+    .footer-container .footer-title,
+    .footer-container h3 {
+        font-size: 1.2rem !important;
+    }
+    
+    .footer-container .footer-text,
+    .footer-container p {
+        font-size: 0.9rem !important;
+    }
+    
+    .footer-container .social-icon {
+        width: 45px !important;
+        height: 45px !important;
+    }
+}
+
+/* --- STREAMLIT SPECIFIC COMPONENTS --- */
+.stApp [data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    border-right: 1px solid rgba(30, 41, 59, 0.1);
+}
+
+/* Additional sidebar selectors to override any existing brown styling */
+.stApp .css-1d391kg,
+.stApp .css-1cypcdb,
+.stApp .css-17eq0hr,
+.stApp [data-testid="stSidebar"] > div,
+.stApp [data-testid="stSidebar"] .block-container,
+.stApp section[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+}
+
+/* Sidebar content styling */
+.stApp [data-testid="stSidebar"] .stMarkdown,
+.stApp [data-testid="stSidebar"] .stSelectbox,
+.stApp [data-testid="stSidebar"] .stButton,
+.stApp [data-testid="stSidebar"] .stTextInput {
+    background: transparent !important;
+}
+
+/* Sidebar text colors */
+.stApp [data-testid="stSidebar"] h1,
+.stApp [data-testid="stSidebar"] h2,
+.stApp [data-testid="stSidebar"] h3,
+.stApp [data-testid="stSidebar"] p,
+.stApp [data-testid="stSidebar"] label {
+    color: #374151 !important;
+}
+
+/* Force override any brown background classes */
+.stApp [class*="css-"][style*="#a47551"],
+.stApp [class*="css-"][style*="#d0b49f"],
+.stApp div[style*="#a47551"],
+.stApp div[style*="#d0b49f"] {
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+}
+
+.stApp [data-testid="stHeader"] {
+    background: linear-gradient(90deg, #1e293b 0%, #334155 100%) !important;
+}
+
+/* --- FORM ELEMENTS --- */
+.stApp .stSelectbox label,
+.stApp .stTextInput label,
+.stApp .stTextArea label {
+    color: #374151 !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+}
+
+.stApp .stSelectbox > div > div,
+.stApp .stTextInput > div > div > input,
+.stApp .stTextArea > div > div > textarea {
+    border: 2px solid #e5e7eb !important;
+    border-radius: 12px !important;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+}
+
+.stApp .stSelectbox > div > div:focus-within,
+.stApp .stTextInput > div > div > input:focus,
+.stApp .stTextArea > div > div > textarea:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+    outline: none !important;
+}
+
+/* --- BUTTONS (Excluding floating chat button) --- */
+.stApp .stButton button:not([key="floating_chat_toggle"]):not([key="close_chat"]) {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 0.75rem 2rem !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.stApp .stButton button:not([key="floating_chat_toggle"]):not([key="close_chat"])::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.stApp .stButton button:not([key="floating_chat_toggle"]):not([key="close_chat"]):hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3) !important;
+}
+
+.stApp .stButton button:not([key="floating_chat_toggle"]):not([key="close_chat"]):hover::before {
+    left: 100%;
+}
+
+.stApp .stButton button:not([key="floating_chat_toggle"]):not([key="close_chat"]):active {
+    transform: translateY(0px) !important;
+    transition: all 0.1s ease !important;
+}
+
+/* --- METRICS & CARDS --- */
+.stApp [data-testid="metric-container"] {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.stApp [data-testid="metric-container"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+/* --- EXPANDER --- */
+.stApp .stExpander {
+    border: 1px solid #e5e7eb !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.stApp .stExpander:hover {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1);
+}
+
+.stApp .stExpander > summary {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    color: #374151 !important;
+    font-weight: 600;
+    padding: 1rem 1.5rem !important;
+    transition: all 0.2s ease;
+}
+
+.stApp .stExpander > summary:hover {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%) !important;
+    color: #1e293b !important;
+}
+
+/* --- DATAFRAME STYLING --- */
+.stApp .stDataFrame {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* --- ALERT BOXES --- */
+.stApp .stAlert {
+    border-radius: 12px !important;
+    border-left: 4px solid #3b82f6 !important;
+    background: rgba(59, 130, 246, 0.05) !important;
+    backdrop-filter: blur(10px);
+}
+
+.stApp .stSuccess {
+    border-left-color: #10b981 !important;
+    background: rgba(16, 185, 129, 0.05) !important;
+}
+
+.stApp .stError {
+    border-left-color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.05) !important;
+}
+
+.stApp .stWarning {
+    border-left-color: #f59e0b !important;
+    background: rgba(245, 158, 11, 0.05) !important;
+}
+
+/* --- TABS --- */
+.stApp .stTabs [data-baseweb="tab-list"] {
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 0.5rem;
+}
+
+.stApp .stTabs [data-baseweb="tab"] {
+    background: transparent !important;
+    border-radius: 8px !important;
+    color: #6b7280 !important;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 1px solid transparent !important;
+}
+
+.stApp .stTabs [data-baseweb="tab"]:hover {
+    background: rgba(59, 130, 246, 0.1) !important;
+    color: #3b82f6 !important;
+    border-color: rgba(59, 130, 246, 0.2) !important;
+}
+
+.stApp .stTabs [aria-selected="true"] {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+    color: white !important;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+/* --- PROGRESS BARS --- */
+.stApp .stProgress > div > div {
+    background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%) !important;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+/* --- SLIDER --- */
+.stApp .stSlider [data-baseweb="slider"] {
+    background: #e5e7eb !important;
+}
+
+.stApp .stSlider [data-baseweb="slider"] [role="slider"] {
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%) !important;
+    box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+    transition: all 0.2s ease;
+}
+
+.stApp .stSlider [data-baseweb="slider"] [role="slider"]:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 8px -1px rgba(59, 130, 246, 0.4);
+}
+
+/* --- CHECKBOX & RADIO --- */
+.stApp .stCheckbox > label,
+.stApp .stRadio > label {
+    color: #374151 !important;
+    font-weight: 500;
+}
+
+.stApp .stCheckbox input:checked + span,
+.stApp .stRadio input:checked + span {
+    background-color: #3b82f6 !important;
+    border-color: #3b82f6 !important;
+}
+
+/* --- LOADING SPINNER --- */
+.stApp .stSpinner > div {
+    border-top-color: #3b82f6 !important;
+}
+
+/* --- SCROLLBAR STYLING --- */
+.stApp ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.stApp ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+.stApp ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.stApp ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+}
+
+/* --- RESPONSIVE DESIGN --- */
+@media (max-width: 768px) {
+    button[key="floating_chat_toggle"] {
+        bottom: 20px !important;
+        right: 20px !important;
+        padding: 12px 20px !important;
+        font-size: 1.3rem !important;
+    }
+    
+    .stApp .hero-banner img {
+        height: 250px;
+        border-radius: 15px;
+    }
+    
+    .stApp .image-card {
+        padding: 1rem;
+        border-radius: 15px;
+    }
+    
+    .stApp h1 {
+        font-size: 2rem !important;
+    }
+}
+
+/* --- ANIMATIONS --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.stApp .image-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.stApp .image-card:nth-child(1) { animation-delay: 0.1s; }
+.stApp .image-card:nth-child(2) { animation-delay: 0.2s; }
+.stApp .image-card:nth-child(3) { animation-delay: 0.3s; }
+.stApp .image-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* --- UTILITY CLASSES --- */
+.glassmorphism {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}

@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environment variables
+.env
+
+# Firebase credentials
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Local development
+.DS_Store
+
+# Logs
+*.log
+
+# Virtual Environment
+venv/
+ENV/
+
+# Streamlit
+.streamlit/
+
+# Firebase
+firebase-debug.log*
+firebase-debug.*.log
