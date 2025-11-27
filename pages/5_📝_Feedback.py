@@ -5,36 +5,13 @@ from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import credentials, firestore
 from pathlib import Path
+from firebase_config import db
 
 # ----------------------------
 # Load environment variables
 # ----------------------------
 env_path = Path(__file__).parent.parent / '.env'
 load_dotenv(env_path, override=True)
-
-# ----------------------------
-# Firebase Initialization
-# ----------------------------
-@st.cache_resource
-def initialize_firebase():
-    try:
-        if not firebase_admin._apps:
-            cred_path = os.getenv("FIREBASE_CREDENTIALS_JSON_PATH")
-            if not cred_path or not os.path.exists(cred_path):
-                st.error("Firebase credentials file not found. Check FIREBASE_CREDENTIALS_JSON_PATH in your .env file.")
-                return None
-            
-            cred = credentials.Certificate(cred_path)
-            firebase_admin.initialize_app(cred)
-            print("✅ Firebase initialized successfully")
-        
-        return firestore.client()
-    except Exception as e:
-        st.error(f"⚠️ Firebase initialization error: {e}")
-        return None
-
-db = initialize_firebase()
-
 # ----------------------------
 # Firebase Feedback Functions
 # ----------------------------

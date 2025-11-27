@@ -6,8 +6,7 @@ import folium
 from streamlit_folium import st_folium
 from geopy.distance import geodesic
 from dotenv import load_dotenv
-import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_config import db
 import hashlib
 import secrets
 import time
@@ -167,24 +166,6 @@ if GOOGLE_MAPS_API_KEY:
         gmaps = None
 else:
     print("⚠️ GOOGLE_MAPS_API_KEY not found in environment variables")
-
-# --- Firebase Initialization ---
-@st.cache_resource
-def initialize_firebase():
-    try:
-        if not firebase_admin._apps:
-            cred_path = os.getenv("FIREBASE_CREDENTIALS_JSON_PATH")
-            if not cred_path or not os.path.exists(cred_path):
-                st.error("FIREBASE_CREDENTIALS_JSON_PATH not found.")
-                return None
-            cred = credentials.Certificate(cred_path)
-            firebase_admin.initialize_app(cred)
-        return firestore.client()
-    except Exception as e:
-        st.error(f"Error initializing Firebase: {e}")
-        return None
-
-db = initialize_firebase()
 
 # --- Password Hashing ---
 def hash_password(password: str) -> str:

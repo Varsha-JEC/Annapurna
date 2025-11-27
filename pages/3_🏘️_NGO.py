@@ -3,8 +3,7 @@ import json
 import os
 from datetime import datetime
 from dotenv import load_dotenv
-import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_config import db
 from pathlib import Path
 import hashlib
 import secrets
@@ -30,29 +29,6 @@ creds_path = os.getenv('FIREBASE_CREDENTIALS_JSON_PATH', '')
 print(f"📂 Raw path from env: {creds_path}")
 print(f"📂 Absolute path: {os.path.abspath(creds_path) if creds_path else 'N/A'}")
 print(f"📂 File exists: {os.path.exists(creds_path) if creds_path else 'N/A'}")
-
-# ----------------------------
-# Firebase Initialization
-# ----------------------------
-@st.cache_resource
-def initialize_firebase():
-    try:
-        if not firebase_admin._apps:
-            cred_path = os.getenv("FIREBASE_CREDENTIALS_JSON_PATH")
-            if not cred_path or not os.path.exists(cred_path):
-                st.error(f"Firebase credentials file not found. Check FIREBASE_CREDENTIALS_JSON_PATH in your .env file.")
-                return None
-            
-            cred = credentials.Certificate(cred_path)
-            firebase_admin.initialize_app(cred)
-            print("✅ Firebase initialized successfully")
-        
-        return firestore.client()
-    except Exception as e:
-        st.error(f"⚠️ Firebase initialization error: {e}")
-        return None
-
-db = initialize_firebase()
 
 # ----------------------------
 # Password Hashing Functions (Same as Donor Portal)

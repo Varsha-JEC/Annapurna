@@ -9,8 +9,7 @@ from google_auth_oauthlib.flow import Flow
 from dotenv import load_dotenv
 import streamlit as st
 from googleapiclient.discovery import build
-import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_config import db
 from chatbot_utils import AnniChatbot
 import google.generativeai as genai
 
@@ -31,24 +30,6 @@ set_page_config()
 env_path = Path(__file__).parent / '.env'
 load_dotenv(env_path, override=True)
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-
-@st.cache_resource
-def initialize_firebase():
-    try:
-        if not firebase_admin._apps:
-            cred_path = os.getenv("FIREBASE_CREDENTIALS_JSON_PATH")
-            if not cred_path or not os.path.exists(cred_path):
-                st.error("Firebase credentials file not found.")
-                return None
-            cred = credentials.Certificate(cred_path)
-            firebase_admin.initialize_app(cred)
-            print("✅ Firebase initialized successfully")
-        return firestore.client()
-    except Exception as e:
-        st.error(f"⚠️ Firebase initialization error: {e}")
-        return None
-
-db = initialize_firebase()
 
 # ----------------------------------------------------------------
 # GOOGLE OAUTH CONFIGURATION
