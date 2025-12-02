@@ -22,54 +22,46 @@ def initialize_firebase():
     global db
     try:
         if not firebase_admin._apps:
-            # 1) Env variable se path (Render + local dono)
-            env_path = _clean(os.getenv("FIREBASE_CREDENTIALS_JSON_PATH"))
+            import json
+            
+            # Try JSON from environment variable first (Render)
+            firebase_creds_json = os.getenv("FIREBASE_CREDENTIALS_JSON")
+            
+            if firebase_creds_json:
+                cred_dict = json.loads(firebase_creds_json)
+                cred = credentials.Certificate(cred_dict)
+                print("✅ Using Firebase credentials from env variable")
+            else:
+                # Fallback to file (local dev)
+                possible_paths = [
+                    os.path.join("env", "firebase_credentials.json"),
+                    "firebase_credentials.json",
+                    "serviceAccount.json",
+                ]
+                
+                cred_path = None
+                for p in possible_paths:
+                    if p and os.path.isfile(p):
+                        cred_path = p
+                        break
+                
+                if not cred_path:
+                    raise RuntimeError("Firebase credentials not found")
+                
+                cred = credentials.Certificate(cred_path)
+                print(f"✅ Using Firebase credentials from: {cred_path}")
 
-            # 2) Possible paths list (no hard-coded D: now)
-            possible_paths = [
-                "/etc/secrets/firebase_credentials.json",      # Render secret file
-                env_path,                                      # .env / Render env
-                os.path.join("env", "firebase_credentials.json"),  # local env/ folder
-                "firebase_credentials.json",                   # project root fallback
-                "serviceAccount.json",
-            ]
-
-            cred_path = None
-            print("🔍 Looking for Firebase credentials in:")
-            for p in possible_paths:
-                if not p:
-                    continue
-                print("   -", p)
-                if os.path.isfile(p):
-                    cred_path = p
-                    print(f"✅ Using Firebase credentials at: {p}")
-                    break
-
-            if not cred_path:
-                msg = (
-                    "Firebase credentials file not found. Tried:\n"
-                    + "\n".join(p for p in possible_paths if p)
-                )
-                print("❌", msg)
-                if st:
-                    st.error(msg)
-                db = None
-                return db
-
-            cred = credentials.Certificate(cred_path)
             firebase_admin.initialize_app(cred)
             print("✅ Firebase Admin initialized")
 
         db = firestore.client()
-        print("✅ Firestore DB initialized")
         return db
 
     except Exception as e:
         print("❌ Firebase init error:", e)
         if st:
             st.error(f"⚠️ Firebase init error: {e}")
-        db = None
-        return db
+        return None
 
 
 if db is None:

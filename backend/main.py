@@ -19,41 +19,38 @@ from firebase_admin import credentials, firestore
 # Load .env from project root (one level above backend/)
 ENV_PATH = Path(__file__).parent.parent / ".env"
 load_dotenv(ENV_PATH, override=True)
-
 def init_firestore():
     try:
         if not firebase_admin._apps:
-            project_root = Path(__file__).parent.parent  # root folder (jahan .env hai)
-
-            possible_paths = [
-                # 1️⃣ Render backend ke liye secret file
-                "/etc/secrets/firebase_credentials.json",
-
-                # 2️⃣ Env variable se path (local / render dono me)
-                os.getenv("FIREBASE_CREDENTIALS_JSON_PATH"),
-
-                # 3️⃣ Local dev ke liye root-relative files
-                str(project_root / "firebase_credentials.json"),
-                str(project_root / "serviceAccount.json"),
-            ]
-
-            cred_path = None
-            print("🔍 [backend] Looking for Firebase credentials in:")
-            for p in possible_paths:
-                if p:
-                    print(f"   - {p}")
-                    if os.path.exists(p):
+            # Try to get credentials from environment variable (JSON string)
+            firebase_creds_json = os.getenv("FIREBASE_CREDENTIALS_JSON")
+            
+            if firebase_creds_json:
+                # Parse JSON string directly (for Render)
+                import json
+                cred_dict = json.loads(firebase_creds_json)
+                cred = credentials.Certificate(cred_dict)
+                print("✅ [backend] Using Firebase credentials from FIREBASE_CREDENTIALS_JSON env var")
+            else:
+                # Fallback to file path (for local development only)
+                possible_paths = [
+                    os.getenv("FIREBASE_CREDENTIALS_JSON_PATH"),
+                    "firebase_credentials.json",
+                    "serviceAccount.json",
+                ]
+                
+                cred_path = None
+                for p in possible_paths:
+                    if p and os.path.exists(p):
                         cred_path = p
-                        print(f"✅ [backend] Using Firebase credentials at: {p}")
                         break
+                
+                if not cred_path:
+                    raise RuntimeError("Firebase credentials not found in env or file system")
+                
+                cred = credentials.Certificate(cred_path)
+                print(f"✅ [backend] Using Firebase credentials from file: {cred_path}")
 
-            if not cred_path:
-                raise RuntimeError(
-                    "Firebase credentials file not found in any known location.\n"
-                    + "\n".join(f"- {p}" for p in possible_paths if p)
-                )
-
-            cred = credentials.Certificate(cred_path)
             firebase_admin.initialize_app(cred)
             print("✅ [backend] Firebase initialized successfully")
 
@@ -62,7 +59,7 @@ def init_firestore():
     except Exception as e:
         print(f"❌ [backend] Firebase initialization error: {e}")
         return None
-
+        
 db = init_firestore()
 if db is None:
     # We still start the server, but endpoints will raise 500 if DB is not ready
