@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 from firebase_config import db
+from firebase_admin import firestore
 from pathlib import Path
 import hashlib
 import secrets

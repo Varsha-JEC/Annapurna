@@ -7,6 +7,7 @@ from streamlit_folium import st_folium
 from geopy.distance import geodesic
 from dotenv import load_dotenv
 from firebase_config import db
+from firebase_admin import firestore
 import hashlib
 import secrets
 import time

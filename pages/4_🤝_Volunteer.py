@@ -2,6 +2,7 @@ import streamlit as st
 import os
 from dotenv import load_dotenv
 from firebase_config import db
+from firebase_admin import firestore
 from pathlib import Path
 
 # ----------------------------
