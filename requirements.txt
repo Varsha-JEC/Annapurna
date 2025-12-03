@@ -7,3 +7,7 @@ uvicorn
 google-auth
 google-auth-oauthlib
 google-api-python-client
+googlemaps
+geopy
+folium
+streamlit-folium
