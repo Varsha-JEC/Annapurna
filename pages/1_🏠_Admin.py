@@ -26,7 +26,7 @@ st.set_page_config(
 # ==============================
 # ADMIN CONFIGURATION
 # ==============================
-ADMIN_EMAIL = "ecologicalfibrecomposites@gmail.com"
+ADMIN_EMAIL = "sharma22varsha@gmail.com"
 ADMIN_PASSWORD = "Pvb@123456"
 
 # ==============================
