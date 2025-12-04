@@ -163,6 +163,32 @@ def verify_ngo_login(email: str, password: str):
         st.error(f"Error logging in: {e}")
         return False, None
 
+def update_ngo_password(email: str, new_password: str):
+    """Update existing NGO's password"""
+    if not db:
+        return False, "Database not initialized."
+    try:
+        if not email or not email.strip():
+            return False, "Email cannot be empty"
+        if not new_password or not new_password.strip():
+            return False, "Password cannot be empty"
+        if len(new_password) < 6:
+            return False, "Password must be at least 6 characters long"
+
+        ngo_ref = db.collection("ngos").document(email.strip().lower())
+        ngo_doc = ngo_ref.get()
+        if not ngo_doc.exists:
+            return False, "No NGO found with this email"
+
+        hashed_password = hash_password(new_password)
+        ngo_ref.update({
+            "hashed_password": hashed_password,
+            "updated_at": firestore.SERVER_TIMESTAMP
+        })
+        return True, "Password updated successfully. Please login with your new password."
+    except Exception as e:
+        return False, f"Error updating password: {str(e)}"
+
 # ----------------------------
 # Session State Initialization
 # ----------------------------
@@ -413,6 +439,13 @@ div[data-testid="stForm"] {
     letter-spacing: -0.025em;
 }
 
+[data-testid="stExpander"] {
+    border-radius: 12px !important;
+    border: 1px solid #e0e6f1 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+    margin-bottom: 1rem !important;
+}
+
 hr {
     border-color: rgba(59, 130, 246, 0.2) !important;
     margin: 2rem 0 !important;
@@ -450,6 +483,43 @@ if not st.session_state.ngo_logged_in:
                     st.rerun()
                 else:
                     st.error("❌ Invalid email or password.")
+
+        # 👉 Forgot Password section
+        st.markdown("---")
+        st.markdown("##### 🔑 Forgot your password?")
+        
+        # Add custom CSS for the expander
+        st.markdown("""
+        <style>
+            div[data-testid='stExpander'] {
+                width: fit-content !important;
+                min-width: 200px !important;
+                max-width: 300px !important;
+            }
+            div[data-testid='stExpander'] > div:first-child {
+                width: 100% !important;
+            }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        with st.expander("Click here to reset your password"):
+            reset_email = st.text_input("📧 Registered Email", key="reset_email")
+            new_pass = st.text_input("🆕 New Password", type="password", key="reset_new_pass")
+            confirm_new_pass = st.text_input("🆕 Confirm New Password", type="password", key="reset_confirm_new_pass")
+
+            if st.button("Reset Password", use_container_width=True, key="reset_password_btn"):
+                if not reset_email or not new_pass or not confirm_new_pass:
+                    st.error("❌ All fields are required.")
+                elif new_pass != confirm_new_pass:
+                    st.error("❌ New password and confirmation do not match.")
+                elif len(new_pass) < 6:
+                    st.error("❌ Password must be at least 6 characters long.")
+                else:
+                    success, msg = update_ngo_password(reset_email, new_pass)
+                    if success:
+                        st.success(f"✅ {msg}")
+                    else:
+                        st.error(f"❌ {msg}")
 
     # --- Register Tab ---
     with tab2:
