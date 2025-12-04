@@ -10,6 +10,11 @@ import hashlib
 import secrets
 
 # ----------------------------
+# Streamlit Page Config (MUST be first Streamlit call)
+# ----------------------------
+st.set_page_config(page_title="NGO Portal", page_icon="🤝", layout="wide")
+
+# ----------------------------
 # Load environment variables
 # ----------------------------
 env_path = Path(__file__).parent.parent / '.env'
@@ -37,55 +42,31 @@ print(f"📂 File exists: {os.path.exists(creds_path) if creds_path else 'N/A'}"
 def hash_password(password: str) -> str:
     """
     Hash a password using SHA-256 with a random salt.
-    
-    Args:
-        password: The plaintext password to hash
-        
-    Returns:
-        str: The salted hash in format 'salt$hash'
-        
-    Raises:
-        ValueError: If password is empty or contains only whitespace
+    Returns salted hash in format: 'salt$hash'
     """
     if not password or not password.strip():
         raise ValueError("Password cannot be empty")
     
-    # Generate a random salt (32 bytes = 256 bits)
     salt = secrets.token_hex(32)
-    
-    # Combine salt and password, then hash with SHA-256
     salted_password = salt + password
     password_hash = hashlib.sha256(salted_password.encode('utf-8')).hexdigest()
-    
-    # Store salt and hash together, separated by $
     return f"{salt}${password_hash}"
+
 
 def verify_password(plain_password: str, stored_hash: str) -> bool:
     """
     Verify a password against a stored hash.
-    
-    Args:
-        plain_password: The password provided by the user
-        stored_hash: The stored hash in format 'salt$hash'
-        
-    Returns:
-        bool: True if the password matches, False otherwise
     """
     if not plain_password or not stored_hash:
         return False
     
     try:
-        # Split the stored hash to get salt and hash
         if '$' not in stored_hash:
             return False
         
         salt, original_hash = stored_hash.split('$', 1)
-        
-        # Hash the provided password with the same salt
         salted_password = salt + plain_password
         password_hash = hashlib.sha256(salted_password.encode('utf-8')).hexdigest()
-        
-        # Compare hashes using constant-time comparison
         return secrets.compare_digest(password_hash, original_hash)
     except Exception as e:
         print(f"Password verification error: {e}")
@@ -99,7 +80,6 @@ def create_ngo(org_name: str, email: str, password: str, address: str, contact_p
     if not db:
         return False, "Database not initialized."
     try:
-        # Validate inputs
         if not org_name or not org_name.strip():
             return False, "Organization name cannot be empty"
         if not email or not email.strip():
@@ -111,12 +91,10 @@ def create_ngo(org_name: str, email: str, password: str, address: str, contact_p
         if not phone or not phone.strip():
             return False, "Phone number cannot be empty"
         
-        # Check if NGO already exists
         ngo_ref = db.collection("ngos").document(email.strip().lower())
         if ngo_ref.get().exists:
             return False, "NGO with this email already exists"
         
-        # Hash password and create NGO
         hashed_password = hash_password(password)
         ngo_data = {
             "org_name": org_name.strip(),
@@ -134,6 +112,7 @@ def create_ngo(org_name: str, email: str, password: str, address: str, contact_p
         return False, str(ve)
     except Exception as e:
         return False, f"Error creating NGO: {str(e)}"
+
 
 def verify_ngo_login(email: str, password: str):
     """Verify NGO login credentials."""
@@ -163,8 +142,9 @@ def verify_ngo_login(email: str, password: str):
         st.error(f"Error logging in: {e}")
         return False, None
 
+
 def update_ngo_password(email: str, new_password: str):
-    """Update existing NGO's password"""
+    """Update existing NGO's password."""
     if not db:
         return False, "Database not initialized."
     try:
@@ -199,8 +179,9 @@ for key, default in {
     if key not in st.session_state:
         st.session_state[key] = default
 
+
 def save_ngo_data(ngo_info: dict):
-    """Save NGO data to session state"""
+    """Save NGO data to session state."""
     st.session_state.ngo_data = {
         "org_name": ngo_info.get("org_name", "NGO User"),
         "email": ngo_info.get("email"),
@@ -211,8 +192,9 @@ def save_ngo_data(ngo_info: dict):
     }
     st.session_state.ngo_logged_in = True
 
+
 def get_available_donations():
-    """Fetch all available donations from Cloud Firestore"""
+    """Fetch all available donations from Cloud Firestore."""
     if not db:
         st.error("Database connection not available.")
         return []
@@ -230,8 +212,9 @@ def get_available_donations():
         st.error(f"Error fetching donations: {e}")
         return []
 
+
 def accept_donation(donation_id: str, ngo_data: dict):
-    """Update donation status to Accepted in Firestore"""
+    """Update donation status to Accepted in Firestore."""
     if not db:
         return False
     try:
@@ -247,12 +230,9 @@ def accept_donation(donation_id: str, ngo_data: dict):
         st.error(f"Error accepting donation: {e}")
         return False
 
-
 # ----------------------------
-# Streamlit Page Config & Styling
+# Styling
 # ----------------------------
-st.set_page_config(page_title="NGO Portal", page_icon="🤝", layout="wide")
-
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -433,7 +413,7 @@ div[data-testid="stForm"] {
     line-height: 1.7;
 }
 
-.stApp h1, .stApp h2, .stApp h3 {
+stApp h1, .stApp h2, .stApp h3 {
     color: #1e293b;
     font-weight: 700 !important;
     letter-spacing: -0.025em;
@@ -488,7 +468,7 @@ if not st.session_state.ngo_logged_in:
         st.markdown("---")
         st.markdown("##### 🔑 Forgot your password?")
         
-        # Add custom CSS for the expander
+        # Optional: custom CSS for expander width
         st.markdown("""
         <style>
             div[data-testid='stExpander'] {
@@ -581,7 +561,10 @@ else:
     if not available_donations:
         st.warning("ℹ️ No active donations available right now. Check back later!")
     else:
-        available_donations.sort(key=lambda d: d.get('created_at', datetime.min), reverse=True)
+        available_donations.sort(
+            key=lambda d: d.get('created_at', datetime.min),
+            reverse=True
+        )
 
         for donation in available_donations:
             with st.container():
@@ -613,5 +596,3 @@ else:
                             st.success(f"🎉 Donation from {donation.get('donor_name', 'donor')} accepted!")
                             st.info("The donor will be notified. Please arrange for pickup.")
                             st.rerun()
-
-                st.divider()
